@@ -14,18 +14,30 @@ source(file = file.path("00_setup.r"))
 rm(list = ls()); gc()
 
 ## --------------------------------- ##
-# MesoWest Instructions ----
+# Data Download Instructions ----
 ## --------------------------------- ##
 
 # In order to download precipitation data for the LKC, do the following:
-## 1. Go here: https://mesowest.utah.edu/cgi-bin/droman/mesomap.cgi?state=CA&rawsflag=3
-## 2. Double check that "Region/Zone" (in top left corner) is set to "CALIFORNIA"
-## 3. Set "Network" to "RAWS"
-## 4. Click "Refresh Map" button
-## 5. Zoom in on Santa Barbara
-## 6. Click on station "SXWC1"
-### Station is east of Lompoc, north of Santa Barbara (in Santa Ynez region)
-## 7. Select "Precip" button in "View" options
-## 8. Click "Download Data" (beneath the scatterplot)
+## 1. Go to Synoptic Data (https://synopticdata.com/)
+## 2. Click "Login" (top right corner)
+## 3. Click "Sign up" and create _FREE_ account (email, name, some other info)
+## 4. Under "My Profile", click "Download data"
+## 5. Under "1. Choose station", enter "SXWC1"
+## 6. Under "2. Dates", enter desired date range
+## 7. Under "3. Variables and units", check the box to the left of "Precipitation accumulated"
+
+## --------------------------------- ##
+# Data Use Instructions ----
+## --------------------------------- ##
+
+# !!!THIS IS IMPORTANT!!!
+## Once you've downloaded the data,
+## _you still need to move it to the right place_
+## for our code to access it
+
+# To use the data with following code files:
+## 1. Run "00_setup.r" to get necessary local folders in your working directory
+## 2. Moved downloaded file(s) into "data/"
+## 3. Move the downloaded file(s) then into "raw/" (subfolder of "data/")
 
 # End ----
