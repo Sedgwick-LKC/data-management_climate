@@ -38,6 +38,6 @@ rm(list = ls()); gc()
 # To use the data with following code files:
 ## 1. Run "00_setup.r" to get necessary local folders in your working directory
 ## 2. Moved downloaded file(s) into "data/"
-## 3. Move the downloaded file(s) then into "raw/" (subfolder of "data/")
+## 3. Move the downloaded file(s) then into "precip/" (subfolder of "data/")
 
 # End ----
