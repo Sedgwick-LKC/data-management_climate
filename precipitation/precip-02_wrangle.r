@@ -64,11 +64,53 @@ prec_v03 <- prec_v02 |>
 dplyr::glimpse(prec_v03)
 
 ## --------------------------------- ##
+# Calculate Precip ----
+## --------------------------------- ##
+
+# Provided data is accumulated precip so need to calculate 'actual' precip
+## Graph of 'problem'
+ggplot2::ggplot(prec_v03, ggplot2::aes(x = date, y = as.numeric(precip.accum_mm))) +
+  ggplot2::geom_point() +
+  ggplot2::geom_path()
+
+# Do needed calculation
+prec_v04 <- prec_v03 |> 
+  # Make precip a real number
+  dplyr::mutate(precip.accum_mm = as.numeric(precip.accum_mm)) |> 
+  # Remove any missing precip
+  dplyr::filter(!is.na(precip.accum_mm)) |> 
+  # We want just one value per date (the maximum)
+  dplyr::group_by(dplyr::across(.cols = dplyr::all_of(setdiff(x = names(prec_v03), y = "precip.accum_mm")))) |> 
+  dplyr::summarize(precip.max = max(precip.accum_mm, na.rm = T),
+                   .groups = "keep") |> 
+  dplyr::ungroup() |> 
+  # Start calculating daily precip
+  dplyr::mutate(precip.diff = precip.max - dplyr::lag(precip.max)) |> 
+  # Fill in the edge cases that doesn't handle well
+  dplyr::mutate(precip_mm = dplyr::case_when(
+    ## If the difference is missing, there is no prior value so we'll just use the accumulated
+    is.na(precip.diff) ~ precip.max,
+    ## If the difference is negative, it's the start of a new catchment cycle
+    precip.diff < 0 ~ precip.max,
+    ## Otherwise, use the difference
+    T ~ precip.diff)) |> 
+  # Ditch leftover columns
+  dplyr::select(-precip.max, -precip.diff)
+
+# Check structure
+dplyr::glimpse(prec_v04)
+
+# Did that work?
+ggplot2::ggplot(prec_v04, ggplot2::aes(x = date, y = as.numeric(precip_mm))) +
+  ggplot2::geom_point() +
+  ggplot2::geom_path()
+
+## --------------------------------- ##
 # Export ----
 ## --------------------------------- ##
 
 # Make a final object
-prec_v99 <- prec_v03
+prec_v99 <- prec_v04
 
 # Re-check structure
 dplyr::glimpse(prec_v99)
